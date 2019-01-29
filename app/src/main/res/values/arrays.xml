@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="spinner_list_item_array">
+        <item >MDFF</item>
+        <item>ABS</item>
+        <item>Engine</item>
+        <item>Fade</item>
+    </string-array>
+    <string-array name="rodzajOpon">
+        <item>@string/feedbacktype1</item>
+        <item>@string/feedbacktype2</item>
+        <item>@string/feedbacktype3</item>
+        <item>@string/feedbacktype4</item>
+    </string-array>
+</resources>

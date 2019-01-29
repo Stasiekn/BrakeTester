@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BrakeTester</string>
+        <!--Other string resources also defined in this file… -->
+        <string name="feedbacktype1">Letnie</string>
+        <string name="feedbacktype2">Zimowe</string>
+        <string name="feedbacktype3">Całoroczne</string>
+        <string name="feedbacktype4">Inne</string>
+
+</resources>
