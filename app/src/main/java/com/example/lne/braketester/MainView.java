@@ -88,7 +88,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
     public  String pol = "pol";
     public String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BrakeTester";
-    //Metody-------------------------------------------------------------------------------------------
+    //Metody-----------------------------------------------------------------------------------------
 
 
 
