@@ -132,7 +132,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         predkosc1=predkosc;
 
         //Gauge END---
-        //INNE---
+        //INNE----
 
 
         //Wykres---
