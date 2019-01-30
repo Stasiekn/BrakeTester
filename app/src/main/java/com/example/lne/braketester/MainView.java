@@ -27,6 +27,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,7 +55,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     public static float predkosc =50, predkosc1;
 
     //Zmienne------------------------------------------------------------------------------------------
-    private PointerSpeedometer speedometer;
+
     LocationService myService;
     static boolean status;
     LocationManager locationManager;
@@ -88,22 +89,22 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     public  String pol = "pol";
     public String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BrakeTester";
     //Metody-------------------------------------------------------------------------------------------
-    //Gauge-------
-    public void setSpeedometer(PointerSpeedometer speedometer) {
-        this.speedometer = speedometer;
 
-    }
-    //Gauge END----
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
-
+       final PointerSpeedometer speedometer = (PointerSpeedometer) findViewById(R.id.pointerSpeedometer);
+        speedometer.setMaxSpeed(200);
+        speedometer.setTickNumber(5);
         Thread t = new Thread(){
+
             public  void run(){
+
                 while (!isInterrupted()){
+
                     try{
                         Thread.sleep(5000);
                         runOnUiThread(new Runnable() {
@@ -112,6 +113,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                             }
                         });
                     } catch (InterruptedException e) {
+
                         e.printStackTrace();
                     }
                 }
@@ -125,9 +127,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         getSupportActionBar().setLogo(R.mipmap.logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         //Gauge---
-        final PointerSpeedometer speedometer = (PointerSpeedometer) findViewById(R.id.pointerSpeedometer);
-        speedometer.setMaxSpeed(200);
-        speedometer.setTickNumber(5);
+
 
         predkosc1=predkosc;
 
