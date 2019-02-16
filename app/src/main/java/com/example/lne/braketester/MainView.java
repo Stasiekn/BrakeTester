@@ -112,10 +112,11 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 speedometer.speedTo(predkosc);
-                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12){
+                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12.3){
                                     Toast.makeText(getBaseContext(), "Przekroczono 30 km/h i 2,19m/s ", Toast.LENGTH_SHORT).show();
                                     predkoscgood = true;
                                     pomiar = true;
+                                    wskaznik1.setText ("Prędkość hamowania: " + new DecimalFormat("#.##").format(predkosc) + " km/hr");
 
                                 }
                                 else if (predkosc <30){
@@ -279,7 +280,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick (View v) {
-                wskaznik1.setText ("Prędkość hamowania: " + new DecimalFormat("#.##").format(pomiarypredkosc[1]) + " km/hr");
+
                 File file = new File(path + "/Pomiary.csv");
 
                 String string = "save mefdgdfgdfdffffffffffffffffgdfgdfgdfgdfgdfgdfgdfgdfgdfgfffffffffff";
@@ -291,7 +292,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                     for (int i=0; i<20000; i++)
                     {
 
-                        printWriter.println( pomiaryacceleration[i]);
+                        printWriter.println( pomiaryacceleration[i]-9.81);
 
 
                     }
@@ -450,19 +451,20 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     @SuppressLint("SetTextI18n")
     @Override
     public void onSensorChanged(SensorEvent event) {
-        xaxis = event.values[0];
-        yaxis = event.values[1];
-        zaxis = event.values[2];
+        //xaxis = event.values[0];
+        //yaxis = event.values[1];
+        //zaxis = event.values[2];
 
 
 
 
         //nextTimer = System.currentTimeMillis();
         //timertimer = nextTimer-startbtnTimer;
-        sredniaakce = Math.sqrt(xaxis*xaxis+yaxis*yaxis+zaxis*zaxis);
+        //sredniaakce = Math.sqrt(xaxis*xaxis+yaxis*yaxis+zaxis*zaxis);
+        sredniaakce = Math.sqrt(event.values[0]*event.values[0]+event.values[1]*event.values[1]+event.values[2]*event.values[2]);
         addpointchart();
         if (w<20000 && pomiar) {
-            pomiaryacceleration[w]=sredniaakce-9.81;
+            pomiaryacceleration[w]=sredniaakce;
             //pomiarypredkosc[w]=predkosc;
             //pomiaryczas[w]=timertimer;
 
