@@ -47,19 +47,19 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-
+import java.text.DecimalFormat;
 
 
 public class MainView extends AppCompatActivity implements SensorEventListener {
 
-    public static float predkosc =50, predkosc1;
+    public static float predkosc, predkosc1;
 
     //Zmienne------------------------------------------------------------------------------------------
 
     LocationService myService;
     static boolean status;
     LocationManager locationManager;
-    static TextView distance, time, speed, counter;
+    static TextView distance, time, speed, counter, wskaznik, wskaznik1;
     Button btnStart, btnStop, btnPause, button2;
     static long startTime, stopTime;
     static ProgressDialog progressDialog;
@@ -70,21 +70,22 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     private SensorManager SM;
     //wykres przyspieszenia
     private Handler mHandler = new Handler();
-    private Handler xHandler = new Handler();
     private LineGraphSeries<DataPoint> series;
     private double lastpoint = 2;
 
     // definicja tablicy pomiarow
-    double [] pomiaryacceleration = new double [60000];
-    float [] pomiarypredkosc = new float[60000];
-    long [] pomiaryczas = new long[60000];
+    double [] pomiaryacceleration = new double [20000];
+    float [] pomiarypredkosc = new float[20000];
+    long [] pomiaryczas = new long[20000];
 
     static long startbtnTimer, nextTimer;
     int w=0;
+    long timertimer;
 
 
     //zapis wartoci do pliku
     int i;
+    boolean predkoscgood =false, pomiar = false;
 
     public  String pol = "pol";
     public String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BrakeTester";
@@ -99,6 +100,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
        final PointerSpeedometer speedometer = (PointerSpeedometer) findViewById(R.id.pointerSpeedometer);
         speedometer.setMaxSpeed(200);
         speedometer.setTickNumber(5);
+        speedometer.setWithTremble(false);
         Thread t = new Thread(){
 
             public  void run(){
@@ -106,10 +108,20 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 while (!isInterrupted()){
 
                     try{
-                        Thread.sleep(5000);
+                        Thread.sleep(400);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 speedometer.speedTo(predkosc);
+                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12){
+                                    Toast.makeText(getBaseContext(), "Przekroczono 30 km/h i 2,19m/s ", Toast.LENGTH_SHORT).show();
+                                    predkoscgood = true;
+                                    pomiar = true;
+                                  
+                                }
+                                else if (predkosc <30){
+                                    predkoscgood = false;
+
+                                }
                             }
                         });
                     } catch (InterruptedException e) {
@@ -179,6 +191,8 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         time = (TextView)findViewById(R.id.time);
         speed = (TextView)findViewById(R.id.speed);
         counter = (TextView)findViewById(R.id.counter);
+        wskaznik = (TextView)findViewById(R.id.wskaznik);
+        wskaznik1 = (TextView)findViewById(R.id.wskaznik1);
 
 
 
@@ -219,11 +233,11 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             public void onClick(View view) {
 
 
-                //speedometer.speedTo(predkosc);
+
                 //btnStart.setVisibility(View.GONE);
-                btnPause.setVisibility(View.VISIBLE);
-                btnPause.setText("Wstrzymaj");
-                btnStop.setVisibility(View.VISIBLE);
+                //btnPause.setVisibility(View.VISIBLE);
+                //btnPause.setText("Wstrzymaj");
+               // btnStop.setVisibility(View.VISIBLE);
 
 
 
@@ -265,7 +279,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick (View v) {
-
+                wskaznik1.setText ("Prędkość hamowania: " + new DecimalFormat("#.##").format(pomiarypredkosc[1]) + " km/hr");
                 File file = new File(path + "/Pomiary.csv");
 
                 String string = "save mefdgdfgdfdffffffffffffffffgdfgdfgdfgdfgdfgdfgdfgdfgdfgfffffffffff";
@@ -274,10 +288,10 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 {
 
                     printWriter = new PrintWriter(file);
-                    for (int i=0; i<60000; i++)
+                    for (int i=0; i<20000; i++)
                     {
 
-                        printWriter.println( pomiaryczas[i]);
+                        printWriter.println( pomiaryacceleration[i]);
 
 
                     }
@@ -443,21 +457,18 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
 
 
-        nextTimer = System.currentTimeMillis();
-        long timertimer = nextTimer-startbtnTimer;
+        //nextTimer = System.currentTimeMillis();
+        //timertimer = nextTimer-startbtnTimer;
         sredniaakce = Math.sqrt(xaxis*xaxis+yaxis*yaxis+zaxis*zaxis);
         addpointchart();
-
-        if (w<60000) {
+        if (w<20000 && pomiar) {
             pomiaryacceleration[w]=sredniaakce-9.81;
-            pomiarypredkosc[w]=predkosc;
-            pomiaryczas[w]=timertimer;
-
-
+            //pomiarypredkosc[w]=predkosc;
+            //pomiaryczas[w]=timertimer;
 
             w = w + 1;
-        }
 
+        }
     }
 
 
@@ -473,16 +484,12 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-
                 lastpoint++;
                 series.appendData(new DataPoint(lastpoint, sredniaakce - 9.81), false, 100);
-
-
-
             }
-        }, 10);
+        }, 50);
     }
+
 
 }
 
