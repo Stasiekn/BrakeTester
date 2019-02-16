@@ -27,7 +27,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Biblioteka Google Service
-    compile 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
     //Biblioteka wykresow Graph View
     implementation 'com.jjoe64:graphview:4.2.2'
     //Biblioteka Gauge

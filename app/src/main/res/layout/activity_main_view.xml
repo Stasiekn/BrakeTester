@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
+        android:layout_marginStart="500dp"
         android:text="Dystans całkowity:"
         android:textColor="@android:color/white"
         android:textSize="25sp"
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/distance"
-            android:layout_marginStart="-10dp"
+            android:layout_marginStart="500dp"
             android:text="Czas:"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
@@ -123,12 +123,34 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="271dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="600dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="100dp"
         android:text="Button" />
 
+    <TextView
+        android:id="@+id/wskaznik"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:text="TextView"
 
+        android:layout_alignParentStart="true"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/wskaznik1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+
+        android:layout_marginTop="90dp"
+        android:text="TextView"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
 
 
 </RelativeLayout>

@@ -116,7 +116,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                                     Toast.makeText(getBaseContext(), "Przekroczono 30 km/h i 2,19m/s ", Toast.LENGTH_SHORT).show();
                                     predkoscgood = true;
                                     pomiar = true;
-                                  
+
                                 }
                                 else if (predkosc <30){
                                     predkoscgood = false;
