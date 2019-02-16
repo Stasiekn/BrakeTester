@@ -59,7 +59,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     LocationService myService;
     static boolean status;
     LocationManager locationManager;
-    static TextView distance, time, speed, counter, wskaznik, wskaznik1;
+    static TextView distance, time, speed, wskaznik1;
     Button btnStart, btnStop, btnPause, button2;
     static long startTime, stopTime;
     static ProgressDialog progressDialog;
@@ -112,7 +112,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 speedometer.speedTo(predkosc);
-                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12.3){
+                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12){
                                     Toast.makeText(getBaseContext(), "Przekroczono 30 km/h i 2,19m/s ", Toast.LENGTH_SHORT).show();
                                     predkoscgood = true;
                                     pomiar = true;
@@ -139,12 +139,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setLogo(R.mipmap.logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        //Gauge---
 
-
-        predkosc1=predkosc;
-
-        //Gauge END---
         //INNE----
 
 
@@ -191,8 +186,6 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         distance = (TextView)findViewById(R.id.distance);
         time = (TextView)findViewById(R.id.time);
         speed = (TextView)findViewById(R.id.speed);
-        counter = (TextView)findViewById(R.id.counter);
-        wskaznik = (TextView)findViewById(R.id.wskaznik);
         wskaznik1 = (TextView)findViewById(R.id.wskaznik1);
 
 
@@ -462,7 +455,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         //timertimer = nextTimer-startbtnTimer;
         //sredniaakce = Math.sqrt(xaxis*xaxis+yaxis*yaxis+zaxis*zaxis);
         sredniaakce = Math.sqrt(event.values[0]*event.values[0]+event.values[1]*event.values[1]+event.values[2]*event.values[2]);
-        addpointchart();
+        addpointchart(); //mozna przeniesc do nowego watku
         if (w<20000 && pomiar) {
             pomiaryacceleration[w]=sredniaakce;
             //pomiarypredkosc[w]=predkosc;

@@ -34,7 +34,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     Location mCurrentLocation, lStart, lEnd;
     static double distance = 0;
     static float speed = 0;
-    static double counter=0;
 
 
     private final  IBinder mBinder = new LocalBinder();
@@ -91,7 +90,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         } else
             lEnd = mCurrentLocation;
         speed = location.getSpeed() * 18 / 5;
-        counter=counter+1;
         //Aktualizacja informacji
         updateUI();
 
@@ -116,7 +114,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 
             MainView.distance.setText(new DecimalFormat("#.###").format(distance) + " metry.");
-            MainView.counter.setText("Czas"+ new DecimalFormat("#.##").format(counter));
+
 
             lStart = lEnd;
 
