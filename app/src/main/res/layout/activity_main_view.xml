@@ -18,22 +18,22 @@
         app:titleTextColor="#FFFF">
     </android.support.v7.widget.Toolbar>
 
-        <com.github.anastr.speedviewlib.PointerSpeedometer
-            android:id="@+id/pointerSpeedometer"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp"
-            app:sv_backgroundCircleColor="#424242"
-            app:sv_speedometerColor="#FFF"
-            app:sv_tickNumber="5" />
+    <com.github.anastr.speedviewlib.PointerSpeedometer
+        android:id="@+id/pointerSpeedometer"
+        android:layout_width="268dp"
+        android:layout_height="262dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        app:sv_backgroundCircleColor="#424242"
+        app:sv_speedometerColor="#FFF"
+        app:sv_tickNumber="5" />
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph"
             android:layout_width="400dp"
-            android:layout_height="200dp"
+            android:layout_height="170dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="370dp"
+            android:layout_marginTop="330dp"
 
              />
 
@@ -103,6 +103,18 @@
             android:background="#36454F"
             android:text="WSTRZYMAJ"
             android:textColor="@android:color/white" />
+    <Button
+        android:id="@+id/runMDFF"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="550dp"
+        android:background="#f0960c"
+        android:text="Trwa próba hamowania"
+        android:textSize="20dp"
+        android:textColor="@android:color/white" />
 
 
     <Button
@@ -125,10 +137,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="600dp"
-        android:text="TextView"
+        android:layout_marginTop="520dp"
+        android:text="Vham:"
         android:textColor="@android:color/white"
-        android:textSize="30sp" />
+        android:textSize="20dp" />
+    <TextView
+        android:id="@+id/mfdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="545dp"
+        android:text="MFDD: brak"
+        android:textColor="@android:color/white"
+        android:textSize="20dp" />
+    <TextView
+    android:id="@+id/czasham"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="570dp"
+    android:text="Tham:"
+    android:textColor="@android:color/white"
+    android:textSize="20dp" />
+    <TextView
+        android:id="@+id/sham"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="595dp"
+        android:text="Sham:"
+        android:textColor="@android:color/white"
+        android:textSize="20dp" />
 
 
 </RelativeLayout>

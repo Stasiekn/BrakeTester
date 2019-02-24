@@ -104,12 +104,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         if ( MainView.p == 0)
         {
             distance = distance + (lStart.distanceTo(lEnd));
-            MainView.stopTime = System.currentTimeMillis();
-            long diff =  MainView.stopTime -  MainView.startTime;
-            diff = TimeUnit.MILLISECONDS.toSeconds(diff);
-            MainView.time.setText("Czas całkowity: " + diff + " sekundy");
 
-            MainView.speed.setText("Prędkość aktualna: " + new DecimalFormat("#.##").format(speed) + " km/hr");
+            MainView.speed.setText("Pręd. akt.: " + new DecimalFormat("#.##").format(speed) + " km/hr");
             MainView.predkosc=speed;
 
 

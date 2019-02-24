@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainView extends AppCompatActivity implements SensorEventListener {
@@ -59,8 +60,8 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     LocationService myService;
     static boolean status;
     LocationManager locationManager;
-    static TextView distance, time, speed, wskaznik1;
-    Button btnStart, btnStop, btnPause, button2;
+    static TextView distance, time, speed, wskaznik1, mfddtext, czasham, sham;
+    Button btnStart, btnStop, btnPause, button2, runMDFF;
     static long startTime, stopTime;
     static ProgressDialog progressDialog;
     static  int p=0;
@@ -72,20 +73,19 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     private Handler mHandler = new Handler();
     private LineGraphSeries<DataPoint> series;
     private double lastpoint = 2;
+    int dsr=0;
+    double suma=0,mfdd;
 
     // definicja tablicy pomiarow
-    double [] pomiaryacceleration = new double [20000];
-    float [] pomiarypredkosc = new float[20000];
-    long [] pomiaryczas = new long[20000];
+    double [] pomiaryacceleration = new double [5000];
+    float [] pomiarypredkosc = new float[5000];
 
-    static long startbtnTimer, nextTimer;
     int w=0;
-    long timertimer;
 
 
     //zapis wartoci do pliku
     int i;
-    boolean predkoscgood =false, pomiar = false;
+    boolean predkoscgood =false, pomiar = false,koniec = false;
 
     public  String pol = "pol";
     public String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BrakeTester";
@@ -108,21 +108,30 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 while (!isInterrupted()){
 
                     try{
-                        Thread.sleep(400);
+                        Thread.sleep(50);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 speedometer.speedTo(predkosc);
-                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12){
+
+                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12.5){
+                                    startTime = System.currentTimeMillis();
                                     Toast.makeText(getBaseContext(), "Przekroczono 30 km/h i 2,19m/s ", Toast.LENGTH_SHORT).show();
+                                    runMDFF.setVisibility(View.VISIBLE);
                                     predkoscgood = true;
                                     pomiar = true;
                                     wskaznik1.setText ("Prędkość hamowania: " + new DecimalFormat("#.##").format(predkosc) + " km/hr");
 
+
                                 }
                                 else if (predkosc <30){
                                     predkoscgood = false;
+                                    if (predkosc < 3 && w>5){
+                                        pomiar=false;
+                                        koniectest();
 
+                                    }
                                 }
+
                             }
                         });
                     } catch (InterruptedException e) {
@@ -187,19 +196,21 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         time = (TextView)findViewById(R.id.time);
         speed = (TextView)findViewById(R.id.speed);
         wskaznik1 = (TextView)findViewById(R.id.wskaznik1);
+        mfddtext = (TextView)findViewById(R.id.mfdd);
+        czasham = (TextView)findViewById(R.id.czasham);
+        sham = (TextView)findViewById(R.id.sham);
 
 
-
-
+        runMDFF = (Button)findViewById(R.id.runMDFF);
         btnPause = (Button)findViewById(R.id.btnPause);
         btnStart = (Button)findViewById(R.id.btnStart);
         btnStop = (Button)findViewById(R.id.btnStop);
-        button2 = (Button)findViewById(R.id.button2); // przycisk do zapisu do pliku
+        button2 = (Button)findViewById(R.id.button2);// przycisk do zapisu do pliku
 
 
 
         checkGPS();
-
+        runMDFF.setVisibility(View.GONE);
 
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
 
@@ -217,7 +228,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         progressDialog.show();
 
 
-        startbtnTimer = System.currentTimeMillis();
+
 
 
 
@@ -227,11 +238,8 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             public void onClick(View view) {
 
 
+                pomiar = true;
 
-                //btnStart.setVisibility(View.GONE);
-                //btnPause.setVisibility(View.VISIBLE);
-                //btnPause.setText("Wstrzymaj");
-               // btnStop.setVisibility(View.VISIBLE);
 
 
 
@@ -276,14 +284,15 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
                 File file = new File(path + "/Pomiary.csv");
 
-                String string = "save mefdgdfgdfdffffffffffffffffgdfgdfgdfgdfgdfgdfgdfgdfgdfgfffffffffff";
                 PrintWriter printWriter = null;
                 try
                 {
 
                     printWriter = new PrintWriter(file);
-                    for (int i=0; i<20000; i++)
+                    for (int i=0; i<dsr; i++)
                     {
+
+
 
                         printWriter.println( pomiaryacceleration[i]-9.81);
 
@@ -444,24 +453,23 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     @SuppressLint("SetTextI18n")
     @Override
     public void onSensorChanged(SensorEvent event) {
-        //xaxis = event.values[0];
-        //yaxis = event.values[1];
-        //zaxis = event.values[2];
+        xaxis = event.values[0];
+        yaxis = event.values[1];
+        zaxis = event.values[2];
 
 
 
 
-        //nextTimer = System.currentTimeMillis();
-        //timertimer = nextTimer-startbtnTimer;
-        //sredniaakce = Math.sqrt(xaxis*xaxis+yaxis*yaxis+zaxis*zaxis);
-        sredniaakce = Math.sqrt(event.values[0]*event.values[0]+event.values[1]*event.values[1]+event.values[2]*event.values[2]);
+
+        sredniaakce = Math.sqrt(xaxis*xaxis+yaxis*yaxis+zaxis*zaxis);
         addpointchart(); //mozna przeniesc do nowego watku
-        if (w<20000 && pomiar) {
+        if (w<5000 && pomiar) {
             pomiaryacceleration[w]=sredniaakce;
-            //pomiarypredkosc[w]=predkosc;
-            //pomiaryczas[w]=timertimer;
+            pomiarypredkosc[w]=predkosc;
+
 
             w = w + 1;
+
 
         }
     }
@@ -482,8 +490,45 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 lastpoint++;
                 series.appendData(new DataPoint(lastpoint, sredniaakce - 9.81), false, 100);
             }
-        }, 50);
+        }, 5);
     }
+    public void koniectest() {
+        stopTime = System.currentTimeMillis();
+        long diff =  MainView.stopTime -  MainView.startTime;
+        diff = TimeUnit.MILLISECONDS.toSeconds(diff);
+       czasham.setText("Czas całkowity: " + diff + " sekundy");
+
+
+
+
+        for(int z= 0; z<pomiaryacceleration.length; z++)
+        {
+            if (pomiaryacceleration[z]>0){
+                dsr++;
+                suma=suma+pomiaryacceleration[z];
+            }
+        }
+        mfdd = suma/dsr;
+        mfddtext.setText ("MFDD: " + new DecimalFormat("#.##").format(mfdd) + " km/hr");
+        double hamowanie = (mfdd*diff*diff)/2;
+        sham.setText ("Sham: " + new DecimalFormat("#.##").format(hamowanie) + " km/hr");
+        koniec = true;
+        runMDFF.setVisibility(View.GONE);
+
+        double [] wykresraportakce = new double [dsr];
+        int y = 0;
+
+        for(int zz= 0; zz<pomiaryacceleration.length; zz++)
+        {
+            if (pomiaryacceleration[zz]>0){
+                wykresraportakce[y]= pomiaryacceleration[zz];
+                        y++;
+            }
+        }
+
+    }
+
+
 
 
 }
