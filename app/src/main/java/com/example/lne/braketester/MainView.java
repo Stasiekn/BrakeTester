@@ -73,11 +73,11 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     private Handler mHandler = new Handler();
     private LineGraphSeries<DataPoint> series;
     private double lastpoint = 2;
-    int dsr=0;
+    static int dsr=0;
     double suma=0,mfdd;
 
     // definicja tablicy pomiarow
-    double [] pomiaryacceleration = new double [5000];
+    static double [] pomiaryacceleration = new double [5000];
     float [] pomiarypredkosc = new float[5000];
 
     int w=0;
@@ -88,7 +88,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     boolean predkoscgood =false, pomiar = false,koniec = false;
 
     public  String pol = "pol";
-    public String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BrakeTester";
+    public static String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BrakeTester";
     //Metody----------------------------------------------------------------------------------------
 
 
@@ -108,7 +108,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 while (!isInterrupted()){
 
                     try{
-                        Thread.sleep(70);
+                        Thread.sleep(150);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 speedometer.speedTo(predkosc);
@@ -283,7 +283,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             public void onClick (View v) {
                 startActivity(new Intent(MainView.this,Pop.class));
 
-                File file = new File(path + "/Pomiary.csv");
+                /*File file = new File(path + "/Pomiary.csv");
 
                 PrintWriter printWriter = null;
                 try
@@ -292,11 +292,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                     printWriter = new PrintWriter(file);
                     for (int i=0; i<dsr; i++)
                     {
-
-
-
-                        printWriter.println( pomiaryacceleration[i]-9.81);
-
+                        printWriter.println(pomiaryacceleration[i]-9.81);
 
                     }
                 }
@@ -305,7 +301,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 }
 
                 printWriter.flush();
-                printWriter.close();
+                printWriter.close();*/
 
             }
 
@@ -494,7 +490,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         }, 5);
     }
     public void koniectest() {
-        startTime = System.currentTimeMillis();
+        //9startTime = System.currentTimeMillis();
         stopTime = System.currentTimeMillis();
         long diff = stopTime - startTime;
         double czas = diff/1000;

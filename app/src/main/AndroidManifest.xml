@@ -37,6 +37,8 @@
             android:theme="@style/AppTheme.CustomTheme">
 
         </activity>
+
+        <receiver android:name=".Pop" />
     </application>
 
 </manifest>
