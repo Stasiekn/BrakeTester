@@ -108,12 +108,12 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 while (!isInterrupted()){
 
                     try{
-                        Thread.sleep(50);
+                        Thread.sleep(70);
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 speedometer.speedTo(predkosc);
 
-                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 12.5){
+                                if (predkosc >= 30 && !predkoscgood && sredniaakce >= 13.5){
                                     startTime = System.currentTimeMillis();
                                     Toast.makeText(getBaseContext(), "Przekroczono 30 km/h i 2,19m/s ", Toast.LENGTH_SHORT).show();
                                     runMDFF.setVisibility(View.VISIBLE);
@@ -125,7 +125,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                                 }
                                 else if (predkosc <30){
                                     predkoscgood = false;
-                                    if (predkosc < 3 && w>5){
+                                    if (predkosc < 3 && w>5 && !koniec){
                                         pomiar=false;
                                         koniectest();
 
@@ -236,9 +236,9 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                koniectest();
 
-
-                pomiar = true;
+               // pomiar = true;
 
 
 
@@ -281,6 +281,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick (View v) {
+                startActivity(new Intent(MainView.this,Pop.class));
 
                 File file = new File(path + "/Pomiary.csv");
 
@@ -446,7 +447,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         Intent i = new Intent(getApplicationContext(), LocationService.class);
         bindService(i, sc, BIND_AUTO_CREATE);
         status = true;
-        startTime = System.currentTimeMillis();
+        //startTime = System.currentTimeMillis();
 
     }
 
@@ -493,38 +494,31 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         }, 5);
     }
     public void koniectest() {
+        startTime = System.currentTimeMillis();
         stopTime = System.currentTimeMillis();
-        long diff =  MainView.stopTime -  MainView.startTime;
-        diff = TimeUnit.MILLISECONDS.toSeconds(diff);
-       czasham.setText("Czas całkowity: " + diff + " sekundy");
+        long diff = stopTime - startTime;
+        double czas = diff/1000;
+        //diff = TimeUnit.MILLISECONDS.toSeconds(diff);
+       czasham.setText("Czas całkowity: " + czas + " sekundy");
 
 
 
 
         for(int z= 0; z<pomiaryacceleration.length; z++)
         {
-            if (pomiaryacceleration[z]>0){
+            if (pomiaryacceleration[z]-9.81>0){
                 dsr++;
-                suma=suma+pomiaryacceleration[z];
+                suma=suma+pomiaryacceleration[z]-9.81;
             }
         }
         mfdd = suma/dsr;
-        mfddtext.setText ("MFDD: " + new DecimalFormat("#.##").format(mfdd) + " km/hr");
-        double hamowanie = (mfdd*diff*diff)/2;
-        sham.setText ("Sham: " + new DecimalFormat("#.##").format(hamowanie) + " km/hr");
+        mfddtext.setText ("MFDD: " + new DecimalFormat("#.##").format(mfdd));
+        double hamowanie = (mfdd*czas*czas)/2;
+        sham.setText ("Sham: " + new DecimalFormat("#.##").format(hamowanie) + " m");
         koniec = true;
         runMDFF.setVisibility(View.GONE);
 
-        double [] wykresraportakce = new double [dsr];
-        int y = 0;
 
-        for(int zz= 0; zz<pomiaryacceleration.length; zz++)
-        {
-            if (pomiaryacceleration[zz]>0){
-                wykresraportakce[y]= pomiaryacceleration[zz];
-                        y++;
-            }
-        }
 
     }
 

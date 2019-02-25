@@ -33,6 +33,10 @@
         <activity
             android:name=".Informacje"
              />
+        <activity android:name=".Pop"
+            android:theme="@style/AppTheme.CustomTheme">
+
+        </activity>
     </application>
 
 </manifest>
