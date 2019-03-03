@@ -61,7 +61,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     static boolean status;
     LocationManager locationManager;
     static TextView distance, time, speed, wskaznik1, mfddtext, czasham, sham;
-    Button btnStart, btnStop, btnPause, button2, runMDFF;
+    Button btnStart, btnStop, button2, runMDFF;
     static long startTime, stopTime;
     static ProgressDialog progressDialog;
     static  int p=0;
@@ -78,7 +78,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
     // definicja tablicy pomiarow
     static double [] pomiaryacceleration = new double [5000];
-    float [] pomiarypredkosc = new float[5000];
+    static float [] pomiarypredkosc = new float[5000];
 
     int w=0;
 
@@ -149,7 +149,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         getSupportActionBar().setLogo(R.mipmap.logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        //INNE----
+        //INNE----+---------------
 
 
         //Wykres---
@@ -202,7 +202,6 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
 
         runMDFF = (Button)findViewById(R.id.runMDFF);
-        btnPause = (Button)findViewById(R.id.btnPause);
         btnStart = (Button)findViewById(R.id.btnStart);
         btnStop = (Button)findViewById(R.id.btnStop);
         button2 = (Button)findViewById(R.id.button2);// przycisk do zapisu do pliku
@@ -229,10 +228,6 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
 
 
-
-
-
-
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,22 +241,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
             }
         });
-     btnPause.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public  void onClick(View v) {
-                if (btnPause.getText().toString().equalsIgnoreCase("WSTRZYMAJ")) {
-                    btnPause.setText("Wznów");
-                    p = 1;
-                } else if (btnPause.getText().toString().equalsIgnoreCase("WZNÓW")) {
-                    checkGPS();
-                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                        return;
-                    btnPause.setText("Wstrzymaj");
-                    p = 0;
-                }
-            }
-        });
+
 
         btnStop.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -269,10 +249,9 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 if(status==true)
                     unbindService();
                 btnStart.setVisibility(View.VISIBLE);
-                btnPause.setText("Wstrzymaj");
-                btnPause.setVisibility(View.GONE);
                 btnStop.setVisibility(View.GONE);
-                startActivity(new Intent(getApplicationContext(),Informacje.class));
+                startActivity(new Intent(getApplicationContext(),Wykresy.class));
+                //startActivity(new Intent(getApplicationContext(),Informacje.class));
 
             }
         });
