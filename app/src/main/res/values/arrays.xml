@@ -2,10 +2,11 @@
 <resources>
     <string-array
         name="spinner_list_item_array">
-        <item >MDFF</item>
-        <item>ABS</item>
-        <item>Engine</item>
-        <item>Fade</item>
+        <item >Główny</item>
+        <item >Wykres</item>
+        <item>Kalkulator</item>
+
+
     </string-array>
     <string-array name="rodzajOpon">
         <item>@string/feedbacktype1</item>

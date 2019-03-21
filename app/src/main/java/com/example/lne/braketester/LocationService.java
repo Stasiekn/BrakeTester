@@ -105,11 +105,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         {
             distance = distance + (lStart.distanceTo(lEnd));
 
-            MainView.speed.setText("Pręd. akt.: " + new DecimalFormat("#.##").format(speed) + " km/hr");
+            //MainView.speed.setText("Pręd. akt.: " + new DecimalFormat("#.##").format(speed) + " km/hr");
             MainView.predkosc=speed;
 
 
-            MainView.distance.setText(new DecimalFormat("#.###").format(distance) + " metry.");
+            //MainView.distance.setText(new DecimalFormat("#.###").format(distance) + " metry.");
 
 
             lStart = lEnd;

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -19,6 +21,7 @@ public class Wykresy extends AppCompatActivity  {
     private Handler mHandler = new Handler();
     private LineGraphSeries<DataPoint> series1, series2;
     private double lastpoint = 2;
+    Button btnCofnij;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +33,22 @@ public class Wykresy extends AppCompatActivity  {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setLogo(R.mipmap.logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+        btnCofnij = (Button)findViewById(R.id.btnCofnij);
+
+
+        btnCofnij.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                finish();
+
+                                         }
+                                     }
+        );
 
         GraphView graph = (GraphView) findViewById(R.id.graph1);
         series1 = new LineGraphSeries<>(new DataPoint[]{});
-        series2 = new LineGraphSeries<>(new DataPoint[]{});
-        series2.setColor(Color.YELLOW);
+        series1.setColor(Color.YELLOW);
         graph.addSeries(series1);
-        graph.addSeries(series2);
         graph.getViewport().setMaxY(10);
         graph.getViewport().setMinY(-10);
         graph.getViewport().setYAxisBoundsManual(false);
@@ -44,9 +56,13 @@ public class Wykresy extends AppCompatActivity  {
         //graph.getViewport().setScalableY(true);
 
         for (int i=0; i<dsr; i++){
-            lastpoint++;
-            series1.appendData(new DataPoint(lastpoint, pomiaryacceleration[i]), false, 2000);
-            series2.appendData(new DataPoint(lastpoint, pomiarypredkosc[i]), false, 2000);
+            if (pomiaryacceleration[i]-9.81>0){
+
+                lastpoint++;
+                series1.appendData(new DataPoint(lastpoint, pomiaryacceleration[i]), false, 2000);
+
+            }
+
 
         }
 

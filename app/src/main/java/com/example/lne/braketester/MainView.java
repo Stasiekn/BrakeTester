@@ -53,14 +53,14 @@ import java.util.concurrent.TimeUnit;
 
 public class MainView extends AppCompatActivity implements SensorEventListener {
 
-    public static float predkosc, predkosc1;
+    public static float predkosc;
 
     //Zmienne------------------------------------------------------------------------------------------
 
     LocationService myService;
     static boolean status;
     LocationManager locationManager;
-    static TextView distance, time, speed, wskaznik1, mfddtext, czasham, sham;
+    static TextView distance, time, wskaznik1, mfddtext, czasham, sham;
     Button btnStart, btnStop, button2, runMDFF;
     static long startTime, stopTime;
     static ProgressDialog progressDialog;
@@ -194,7 +194,6 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         //Init variable
         distance = (TextView)findViewById(R.id.distance);
         time = (TextView)findViewById(R.id.time);
-        speed = (TextView)findViewById(R.id.speed);
         wskaznik1 = (TextView)findViewById(R.id.wskaznik1);
         mfddtext = (TextView)findViewById(R.id.mfdd);
         czasham = (TextView)findViewById(R.id.czasham);
@@ -210,6 +209,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
         checkGPS();
         runMDFF.setVisibility(View.GONE);
+        button2.setVisibility(View.GONE);
 
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
 
@@ -231,13 +231,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                koniectest();
-
-               // pomiar = true;
-
-
-
-
+                startActivity(new Intent(getApplicationContext(),Informacje.class));
 
             }
         });
@@ -246,12 +240,21 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         btnStop.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(status==true)
-                    unbindService();
-                btnStart.setVisibility(View.VISIBLE);
-                btnStop.setVisibility(View.GONE);
-                startActivity(new Intent(getApplicationContext(),Wykresy.class));
-                //startActivity(new Intent(getApplicationContext(),Informacje.class));
+                //btnStart.setVisibility(View.VISIBLE);
+
+
+                mfddtext.setText ("MFDD: ----");
+                sham.setText ("Sham: ----");
+                czasham.setText("Czas całkowity: ----");
+                wskaznik1.setText ("Prędkość hamowania: ----");
+                button2.setVisibility(View.GONE);
+                predkoscgood = false;
+                pomiar = false;
+                koniec = false;
+
+
+
+
 
             }
         });
@@ -261,26 +264,6 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             @Override
             public void onClick (View v) {
                 startActivity(new Intent(MainView.this,Pop.class));
-
-                /*File file = new File(path + "/Pomiary.csv");
-
-                PrintWriter printWriter = null;
-                try
-                {
-
-                    printWriter = new PrintWriter(file);
-                    for (int i=0; i<dsr; i++)
-                    {
-                        printWriter.println(pomiaryacceleration[i]-9.81);
-
-                    }
-                }
-                catch (FileNotFoundException e){
-                    e.printStackTrace();
-                }
-
-                printWriter.flush();
-                printWriter.close();*/
 
             }
 
@@ -308,17 +291,18 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        Toast.makeText(getBaseContext(), "Wybrano test MDFF ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Okno główne ", Toast.LENGTH_LONG).show();
                         break;
                     case 1:
-                        Toast.makeText(getBaseContext(), "Wybrano test systemu ABS ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Okno wykresów ", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getApplicationContext(),Wykresy.class));
+
                         break;
                     case 2:
-                        Toast.makeText(getBaseContext(), "Wybrano test hamowania silnikiem ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Kalkulator drogi hamowania ", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getApplicationContext(),Kalkulator.class));
                         break;
-                    case 3:
-                        Toast.makeText(getBaseContext(), "Wybrano test sprawności hamulców ", Toast.LENGTH_LONG).show();
-                        break;
+
                 }
             }
 
@@ -488,10 +472,11 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         }
         mfdd = suma/dsr;
         mfddtext.setText ("MFDD: " + new DecimalFormat("#.##").format(mfdd));
-        double hamowanie = (mfdd*czas*czas)/2;
+        double hamowanie = (predkosc*predkosc)/2*mfdd;
         sham.setText ("Sham: " + new DecimalFormat("#.##").format(hamowanie) + " m");
         koniec = true;
         runMDFF.setVisibility(View.GONE);
+        button2.setVisibility(View.VISIBLE);
 
 
 
