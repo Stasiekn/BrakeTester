@@ -99,6 +99,19 @@
         android:text="Trwa próba hamowania"
         android:textSize="20dp"
         android:textColor="@android:color/white" />
+    <Button
+        android:id="@+id/sprbut"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="140dp"
+        android:background="#424242"
+        android:text="Hamulce sprawne"
+        android:textSize="20dp"
+        android:textColor="@android:color/holo_green_dark" />
+
 
 
     <Button
@@ -152,6 +165,14 @@
         android:text="Sham:"
         android:textColor="@android:color/white"
         android:textSize="20dp" />
-
+    <TextView
+        android:id="@+id/sprawnosc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="620dp"
+        android:text="Sprawność hamulców:"
+        android:textColor="@android:color/white"
+        android:textSize="20dp" />
 
 </RelativeLayout>

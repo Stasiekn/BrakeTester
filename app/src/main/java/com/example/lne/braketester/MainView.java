@@ -60,8 +60,8 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     LocationService myService;
     static boolean status;
     LocationManager locationManager;
-    static TextView distance, time, wskaznik1, mfddtext, czasham, sham;
-    Button btnStart, btnStop, button2, runMDFF;
+    static TextView distance, time, wskaznik1, mfddtext, czasham, sham,spraw;
+    Button btnStart, btnStop, button2, runMDFF, sprawnosc;
     static long startTime, stopTime;
     static ProgressDialog progressDialog;
     static  int p=0;
@@ -74,7 +74,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
     private LineGraphSeries<DataPoint> series;
     private double lastpoint = 2;
     static int dsr=0;
-    double suma=0,mfdd;
+    double suma=0,mfdd, sprawnoschamulce=0;
 
     // definicja tablicy pomiarow
     static double [] pomiaryacceleration = new double [5000];
@@ -198,8 +198,9 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         mfddtext = (TextView)findViewById(R.id.mfdd);
         czasham = (TextView)findViewById(R.id.czasham);
         sham = (TextView)findViewById(R.id.sham);
+        spraw = (TextView)findViewById(R.id.sprawnosc);
 
-
+        sprawnosc = (Button)findViewById(R.id.sprbut);
         runMDFF = (Button)findViewById(R.id.runMDFF);
         btnStart = (Button)findViewById(R.id.btnStart);
         btnStop = (Button)findViewById(R.id.btnStop);
@@ -210,6 +211,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         checkGPS();
         runMDFF.setVisibility(View.GONE);
         button2.setVisibility(View.GONE);
+        sprawnosc.setVisibility(View.GONE);
 
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
 
@@ -244,6 +246,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
 
 
                 mfddtext.setText ("MFDD: ----");
+                spraw.setText ("Sprawność układu hamulcowego: ----");
                 sham.setText ("Sham: ----");
                 czasham.setText("Czas całkowity: ----");
                 wskaznik1.setText ("Prędkość hamowania: ----");
@@ -251,6 +254,7 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
                 predkoscgood = false;
                 pomiar = false;
                 koniec = false;
+                sprawnosc.setVisibility(View.GONE);
 
 
 
@@ -477,6 +481,17 @@ public class MainView extends AppCompatActivity implements SensorEventListener {
         koniec = true;
         runMDFF.setVisibility(View.GONE);
         button2.setVisibility(View.VISIBLE);
+        sprawnoschamulce=mfdd/9.81*10;
+        spraw.setText ("Sprawność układu hamulcowego: " + new DecimalFormat("#.##").format(sprawnoschamulce) + " %");
+        if (predkosc >= 75&& mfdd>=5.8) {
+            sprawnosc.setVisibility(View.VISIBLE);
+        }
+        else{
+            sprawnosc.setVisibility(View.VISIBLE);
+            sprawnosc.setText("TEST NIEUDANY");
+            sprawnosc.setTextColor(getColor(R.color.colorAccent));
+        }
+
 
 
 

@@ -81,7 +81,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="174dp"
         android:fontFamily="@font/font"
-        android:text="Intesywnośc hamowania:"
+        android:text="Intesywność hamowania:"
         android:textColor="@android:color/white"
         android:textSize="15sp" />
 
