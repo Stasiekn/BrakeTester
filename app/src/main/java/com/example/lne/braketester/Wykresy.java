@@ -59,7 +59,7 @@ public class Wykresy extends AppCompatActivity  {
             if (pomiaryacceleration[i]-9.81>0){
 
                 lastpoint++;
-                series1.appendData(new DataPoint(lastpoint, pomiaryacceleration[i]), false, 2000);
+                series1.appendData(new DataPoint(lastpoint, pomiaryacceleration[i]-9.81), false, 2000);
 
             }
 
